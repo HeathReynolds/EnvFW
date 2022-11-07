@@ -73,4 +73,3 @@ resource "nsxt_policy_security_policy" "firewall_section" {
     scope                 = [nsxt_policy_group.prod_group.path, nsxt_policy_group.dev_group.path]
   }
 }
-# Test Push
