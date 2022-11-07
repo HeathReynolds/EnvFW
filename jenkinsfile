@@ -1,0 +1,28 @@
+pipeline {
+  agent any
+  options {
+    skipDefaultCheckout(true)
+  }
+  stages{
+    stage('checkout') {
+      steps {
+        checkout scm
+      }
+    }
+    stage('terraform init') {
+      steps {
+        bat "${tool name: 'JenkinsTF'}terraform init"
+      }
+    }
+    stage('terraform refresh') {
+      steps {
+        bat "${tool name: 'JenkinsTF'}terraform refresh"
+      }
+    }
+    stage('terraform apply') {
+      steps {
+        bat "${tool name: 'JenkinsTF'}terraform apply -auto-approve -no-color"
+      }
+    }
+  }
+}
