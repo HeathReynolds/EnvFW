@@ -94,17 +94,6 @@ resource "nsxt_policy_security_policy" "firewall_section" {
   }
 
     rule {
-    display_name          = "Dev to Prod"
-    description           = "Segment Internal Network"
-    action                = "DROP"
-    logged                = true
-    ip_version            = "IPV4"
-    destination_groups    = [nsxt_policy_group.dev_group.path]
-    source_groups         = [nsxt_policy_group.prod_group.path]
-    scope                 = [nsxt_policy_group.prod_group.path, nsxt_policy_group.dev_group.path]
-  }
-
-    rule {
     display_name          = "Low to High"
     description           = "Segment Internal Network"
     action                = "DROP"
