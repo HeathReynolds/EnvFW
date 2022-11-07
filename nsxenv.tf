@@ -44,6 +44,26 @@ resource "nsxt_policy_group" "dev_group" {
   }
 }
 
+resource "nsxt_policy_group" "LowSec_ip" {
+  description  = "Group containing Infrastructure IPs"
+  display_name = "LowSecIPSet"
+  criteria {
+    ipaddress_expression {
+      ip_addresses = ["192.168.110.0/24"]
+    }
+  }
+}
+
+resource "nsxt_policy_group" "HighSec_ip" {
+  description  = "Group containing Infrastructure IPs"
+  display_name = "HighSecIPSet"
+  criteria {
+    ipaddress_expression {
+      ip_addresses = ["172.16.120.0/24"]
+    }
+  }
+}
+
 resource "nsxt_policy_security_policy" "firewall_section" {
   display_name = "Enviromental Seg"
   description  = "Restrict traffic between Prod and Dev"
@@ -71,5 +91,26 @@ resource "nsxt_policy_security_policy" "firewall_section" {
     destination_groups    = [nsxt_policy_group.dev_group.path]
     source_groups         = [nsxt_policy_group.prod_group.path]
     scope                 = [nsxt_policy_group.prod_group.path, nsxt_policy_group.dev_group.path]
+  }
+
+    rule {
+    display_name          = "Dev to Prod"
+    description           = "Segment Internal Network"
+    action                = "DROP"
+    logged                = true
+    ip_version            = "IPV4"
+    destination_groups    = [nsxt_policy_group.dev_group.path]
+    source_groups         = [nsxt_policy_group.prod_group.path]
+    scope                 = [nsxt_policy_group.prod_group.path, nsxt_policy_group.dev_group.path]
+  }
+
+    rule {
+    display_name          = "Low to High"
+    description           = "Segment Internal Network"
+    action                = "DROP"
+    logged                = true
+    ip_version            = "IPV4"
+    destination_groups    = [nsxt_policy_group.HighSec_ip.path]
+    source_groups         = [nsxt_policy_group.LowSec_ip.path]
   }
 }
