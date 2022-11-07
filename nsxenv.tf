@@ -88,8 +88,8 @@ resource "nsxt_policy_security_policy" "firewall_section" {
     action                = "DROP"
     logged                = true
     ip_version            = "IPV4"
-    destination_groups    = [nsxt_policy_group.dev_group.path]
-    source_groups         = [nsxt_policy_group.prod_group.path]
+    destination_groups    = [nsxt_policy_group.prod_group.path]
+    source_groups         = [nsxt_policy_group.dev_group.path]
     scope                 = [nsxt_policy_group.prod_group.path, nsxt_policy_group.dev_group.path]
   }
 
